@@ -1,2 +1,2 @@
 # trabalho1-bd2
- otimizacao-com-indices
+Este será um trabalho em grupo sobre otimização de banco de dados utilizando índices
