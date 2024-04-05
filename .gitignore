@@ -1,2 +1,10 @@
 venv
 venv/
+
+clientes.sql
+clientes.sql
+taxis.sql
+zonas.sql
+empresas.sql
+motoristas.sql
+corridas.sql
