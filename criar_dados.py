@@ -4,11 +4,13 @@ import random
 from abc import ABC, abstractmethod
 
 class AbstractGenerator(ABC):
-    def __init__(self, seed: int, language: str, taxi_path: str, driver_path: str) -> None:
+    def __init__(self, seed: int, language: str, taxi_path: str, driver_path: str, user_path: str, course_path: str) -> None:
         super().__init__()
         self._faker = Faker(language, seed=seed)
         self._taxi_path = taxi_path
         self._driver_path = driver_path
+        self._user_path = user_path
+        self._course_path = course_path
         
     
     @abstractmethod
@@ -21,11 +23,25 @@ class AbstractGenerator(ABC):
     def generate_fake_drivers(self, quantity: int) -> None:
         if os.path.exists(self._driver_path):
             os.remove(self._driver_path)
+    
+    @abstractmethod
+    def generate_fake_users(self, quantity: int) -> None:
+        if os.path.exists(self._user_path):
+            os.remove(self._user_path)
+            
+
+    @abstractmethod
+    def generate_fake_drives(self, quantity: int) -> None:
+        if os.path.exists(self._course_path):
+            os.remove(self._course_path)
+
 
 class Generator(AbstractGenerator):
-    def __init__(self, seed: int, language: str, taxi_path: str, driver_path: str) -> None:
-        super().__init__(seed, language, taxi_path, driver_path)
+    def __init__(self, seed: int, language: str, taxi_path: str, driver_path: str, user_path: str, course_path) -> None:
+        super().__init__(seed, language, taxi_path, driver_path, user_path, course_path)
         self.__plates = list()
+        self.__cnhs = list()
+        self.__user_quantity = 0
          
     def generate_fake_taxis(self, quantity: int) -> None:
         super().generate_fake_taxis(quantity)
@@ -61,6 +77,7 @@ class Generator(AbstractGenerator):
     
         for i in range(0, quantity):
             cnh = self._faker.random_number(digits=11)
+            self.__cnhs.append(cnh)
             name = self._faker.name()
             validade = self._faker.date()
             placa = self.__plates[i]
@@ -70,9 +87,41 @@ class Generator(AbstractGenerator):
         with open(self._driver_path, 'w') as file:
             file.write(file_as_str)
             
+    def generate_fake_users(self, quantity: int) -> None:
+        super().generate_fake_users(quantity)
+        self.__user_quantity = quantity
+
+        
+        file_as_str = ''
+    
+        for i in range(0, quantity):
+            name = self._faker.name()
+            cpf = self._faker.cpf()
+            
+            file_as_str += (f"INSERT INTO Cliente(CliId, Nome, CPF) VALUES ('{i}', '{name}', {cpf});\n")
+            
+        with open(self._driver_path, 'w') as file:
+            file.write(file_as_str)
+            
+    def generate_fake_drives(self, quantity: int) -> None:
+        super().generate_fake_drives(quantity)
+    
+        file_as_str = ''
+        for i in range(0, quantity):
+            user_id = random.randint(0, self.__user_quantity)
+            plate = random.choice(self.__plates)
+            date = self._faker.date()
+            
+            file_as_str += (f"INSERT INTO Corrida(CliId, Placa, DataPedido) VALUES ('{user_id}', '{plate}', '{date}');\n")
+        
+        with open(self._course_path, 'w') as file:
+            file.write(file_as_str)
+            
             
 if __name__ == '__main__':
-    fake_generator = Generator(1024, 'PT-BR', 'taxis.sql', 'motoristas.sql')
+    fake_generator = Generator(1024, 'PT-BR', 'taxis.sql', 'motoristas.sql', 'clientes.sql', 'corridas.sql')
     fake_generator.generate_fake_taxis(10000)
     fake_generator.generate_fake_drivers(10000)
+    fake_generator.generate_fake_users(19789)
+    fake_generator.generate_fake_drives(65535)
     
