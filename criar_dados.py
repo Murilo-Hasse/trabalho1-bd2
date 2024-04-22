@@ -2,38 +2,35 @@ from faker import Faker
 import os
 import random
 from abc import ABC, abstractmethod
+from pathlib import Path
+
+PATH = Path(__file__).parent
+
+
+def save_to_file(func):
+    def wrapper(this, quantity):
+        path, content = func(this, quantity)
+        with open(path, 'w') as file:
+            file.write(content)
+    return wrapper
+
 
 class AbstractGenerator(ABC):
     def __init__(self, seed: int, language: str, taxi_path: str, driver_path: str, user_path: str, course_path: str) -> None:
         super().__init__()
+        
+        files = [file.lower() for file in os.listdir(PATH) if file.endswith('.sql')]
+
+        for path in files:
+            if(path == 'procedures.sql'):
+                continue
+            os.remove(path)
+        
         self._faker = Faker(language, seed=seed)
         self._taxi_path = taxi_path
         self._driver_path = driver_path
         self._user_path = user_path
         self._course_path = course_path
-        
-    
-    @abstractmethod
-    def generate_fake_taxis(self, quantity: int) -> None:
-        if os.path.exists(self._taxi_path):
-            os.remove(self._taxi_path)
-    
-    
-    @abstractmethod
-    def generate_fake_drivers(self, quantity: int) -> None:
-        if os.path.exists(self._driver_path):
-            os.remove(self._driver_path)
-    
-    @abstractmethod
-    def generate_fake_users(self, quantity: int) -> None:
-        if os.path.exists(self._user_path):
-            os.remove(self._user_path)
-            
-
-    @abstractmethod
-    def generate_fake_drives(self, quantity: int) -> None:
-        if os.path.exists(self._course_path):
-            os.remove(self._course_path)
 
 
 class Generator(AbstractGenerator):
@@ -42,9 +39,10 @@ class Generator(AbstractGenerator):
         self.__plates = list()
         self.__cnhs = list()
         self.__user_quantity = 0
-         
+    
+    
+    @save_to_file
     def generate_fake_taxis(self, quantity: int) -> None:
-        super().generate_fake_taxis(quantity)
         number = 0
         file_as_str = ''
         
@@ -67,12 +65,10 @@ class Generator(AbstractGenerator):
             file_as_str += (f"INSERT INTO Taxi(Placa, Marca, Modelo, AnoFab, Licenca) VALUES ('{placa}', '{brand}', '{type}', {year}, '{license}');\n")
             number += 1
             
-        with open(self._taxi_path, 'w') as file:
-            file.write(file_as_str)
+        return self._taxi_path, file_as_str
     
-    def generate_fake_drivers(self, quantity: int) -> None:
-        super().generate_fake_drivers(quantity)
-        
+    @save_to_file
+    def generate_fake_drivers(self, quantity: int) -> None:        
         file_as_str = ''
     
         for i in range(0, quantity):
@@ -84,11 +80,10 @@ class Generator(AbstractGenerator):
             
             file_as_str += (f"INSERT INTO Motorista(CNH, Nome, CNHValid, Placa) VALUES ('{cnh}', '{name}', {validade}, '{placa}');\n")
             
-        with open(self._driver_path, 'w') as file:
-            file.write(file_as_str)
-            
+        return self._driver_path, file_as_str
+    
+    @save_to_file
     def generate_fake_users(self, quantity: int) -> None:
-        super().generate_fake_users(quantity)
         self.__user_quantity = quantity
 
         
@@ -100,12 +95,10 @@ class Generator(AbstractGenerator):
             
             file_as_str += (f"INSERT INTO Cliente(CliId, Nome, CPF) VALUES ('{i}', '{name}', {cpf});\n")
             
-        with open(self._driver_path, 'w') as file:
-            file.write(file_as_str)
-            
-    def generate_fake_drives(self, quantity: int) -> None:
-        super().generate_fake_drives(quantity)
+        return self._user_path, file_as_str
     
+    @save_to_file
+    def generate_fake_drives(self, quantity: int) -> None:    
         file_as_str = ''
         for i in range(0, quantity):
             user_id = random.randint(0, self.__user_quantity)
@@ -114,8 +107,7 @@ class Generator(AbstractGenerator):
             
             file_as_str += (f"INSERT INTO Corrida(CliId, Placa, DataPedido) VALUES ('{user_id}', '{plate}', '{date}');\n")
         
-        with open(self._course_path, 'w') as file:
-            file.write(file_as_str)
+        return self._course_path, file_as_str
             
             
 if __name__ == '__main__':
