@@ -1,10 +1,11 @@
-DROP TABLE IF EXISTS Taxi;
-DROP TABLE IF EXISTS Cliente;
 DROP TABLE IF EXISTS Corrida;
+DROP TABLE IF EXISTS Fila;
+DROP TABLE IF EXISTS Cliente;
+DROP TABLE IF EXISTS ClienteEmpresa;
+DROP TABLE IF EXISTS ClienteFisico;
 DROP TABLE IF EXISTS Motorista;
 DROP TABLE IF EXISTS Zona;
-DROP TABLE IF EXISTS Fila;
-DROP TABLE IF EXISTS ClienteEmpresa;
+DROP TABLE IF EXISTS Taxi;
 
 CREATE TABLE Taxi (
   Placa VARCHAR(7) NOT NULL,
@@ -15,15 +16,59 @@ CREATE TABLE Taxi (
   PRIMARY KEY(Placa)
 );
 
-CREATE TABLE Cliente (
+
+--------------------------------------------------------------------------------------
+
+CREATE TABLE ClienteEmpresa (
   CliId VARCHAR(4) NOT NULL,
   Nome VARCHAR(80) NOT NULL,
-  CPF VARCHAR(14) NOT NULL,
+  CNPJ VARCHAR(14) NOT NULL UNIQUE,
   PRIMARY KEY(CliId)
 );
 
-CREATE TABLE Corrida (
+CREATE TABLE ClienteFisico (
   CliId VARCHAR(4) NOT NULL,
+  Nome VARCHAR(80) NOT NULL,
+  CPF VARCHAR(14) NOT NULL UNIQUE,
+  PRIMARY KEY(CliId)
+);
+
+
+CREATE TABLE Cliente (
+  CliId BIGSERIAL NOT NULL PRIMARY KEY,
+  Documento VARCHAR(14) NOT NULL UNIQUE,
+  FOREIGN KEY (Documento) REFERENCES ClienteEmpresa(CNPJ) ON DELETE CASCADE,
+  FOREIGN KEY (Documento) REFERENCES ClienteFisico(CPF) ON DELETE CASCADE
+);
+
+CREATE OR REPLACE FUNCTION insert_client()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF (TG_TABLE_NAME = 'ClienteEmpresa') THEN
+        INSERT INTO Cliente(Documento) VALUES (NEW.CNPJ);
+    ELSIF (TG_TABLE_NAME = 'ClienteFisico') THEN
+        INSERT INTO Cliente(Documento) VALUES (NEW.CPF);
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER insert_user
+AFTER INSERT ON ClienteEmpresa
+FOR EACH ROW
+EXECUTE FUNCTION insert_client();
+
+CREATE OR REPLACE TRIGGER insert_user
+AFTER INSERT ON ClienteFisico
+FOR EACH ROW
+EXECUTE FUNCTION insert_client();
+
+--------------------------------------------------------------------------------------
+
+
+
+CREATE TABLE Corrida (
+  CliId INTEGER NOT NULL,
   Placa VARCHAR(7) NOT NULL,
   DataPedido DATE NOT NULL,
   PRIMARY KEY(CliId, Placa, DataPedido),
@@ -70,12 +115,4 @@ CREATE TABLE Fila (
      REFERENCES Motorista(CNH)
        ON DELETE NO ACTION
        ON UPDATE NO ACTION
-);
-
-
-CREATE TABLE ClienteEmpresa (
-  CliId VARCHAR(4) NOT NULL,
-  Nome VARCHAR(80) NOT NULL,
-  CNPJ VARCHAR(14) NOT NULL,
-  PRIMARY KEY(CliId)
 );
