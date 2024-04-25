@@ -16,10 +16,8 @@ def save_to_file(func):
     return wrapper
 
 
-class AbstractGenerator(ABC):
-    def __init__(self, seed: int, language: str, taxi_path: str, driver_path: str, user_path: str, course_path: str, enterprises_path: str, place_path: str, queue_path: str) -> None:
-        super().__init__()
-        
+class Generator:
+    def __init__(self, seed: int, language: str, taxi_path: str, driver_path: str, user_path: str, course_path, enterprises_path: str, place_path: str, queue_path: str) -> None:
         files = [file.lower() for file in os.listdir(PATH) if file.endswith('.sql')]
 
         for path in files:
@@ -35,11 +33,7 @@ class AbstractGenerator(ABC):
         self._enterprises_path = enterprises_path
         self._place_path = place_path
         self._queue_path = queue_path
-
-
-class Generator(AbstractGenerator):
-    def __init__(self, seed: int, language: str, taxi_path: str, driver_path: str, user_path: str, course_path, enterprises_path: str, place_path: str, queue_path: str) -> None:
-        super().__init__(seed, language, taxi_path, driver_path, user_path, course_path, enterprises_path, place_path, queue_path)
+        
         self.__plates = list()
         self.__cnhs = list()
         self.__user_quantity = 0
