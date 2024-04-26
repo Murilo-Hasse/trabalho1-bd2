@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS Corrida;
 DROP TABLE IF EXISTS Fila;
 DROP TABLE IF EXISTS Cliente;
-DROP TABLE IF EXISTS ClienteEmpresa;
+DROP TABLE IF EXISTS ClienteJuridico;
 DROP TABLE IF EXISTS ClienteFisico;
 DROP TABLE IF EXISTS Motorista;
 DROP TABLE IF EXISTS Zona;
@@ -19,9 +19,9 @@ CREATE TABLE Taxi (
 
 --------------------------------------------------------------------------------------
 
-CREATE TABLE ClienteEmpresa (
+CREATE TABLE ClienteJuridico (
   CliId VARCHAR(4) NOT NULL,
-  Nome VARCHAR(80) NOT NULL,
+  RazaoSocial VARCHAR(80) NOT NULL,
   CNPJ VARCHAR(14) NOT NULL UNIQUE,
   PRIMARY KEY(CliId)
 );
@@ -37,14 +37,14 @@ CREATE TABLE ClienteFisico (
 CREATE TABLE Cliente (
   CliId BIGSERIAL NOT NULL PRIMARY KEY,
   Documento VARCHAR(14) NOT NULL UNIQUE,
-  FOREIGN KEY (Documento) REFERENCES ClienteEmpresa(CNPJ) ON DELETE CASCADE,
+  FOREIGN KEY (Documento) REFERENCES ClienteJuridico(CNPJ) ON DELETE CASCADE,
   FOREIGN KEY (Documento) REFERENCES ClienteFisico(CPF) ON DELETE CASCADE
 );
 
 CREATE OR REPLACE FUNCTION insert_client()
 RETURNS TRIGGER AS $$
 BEGIN
-    IF (TG_TABLE_NAME = 'ClienteEmpresa') THEN
+    IF (TG_TABLE_NAME = 'ClienteJuridico') THEN
         INSERT INTO Cliente(Documento) VALUES (NEW.CNPJ);
     ELSIF (TG_TABLE_NAME = 'ClienteFisico') THEN
         INSERT INTO Cliente(Documento) VALUES (NEW.CPF);
@@ -54,7 +54,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE TRIGGER insert_user
-AFTER INSERT ON ClienteEmpresa
+AFTER INSERT ON ClienteJuridico
 FOR EACH ROW
 EXECUTE FUNCTION insert_client();
 
