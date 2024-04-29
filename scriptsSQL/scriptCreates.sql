@@ -68,12 +68,13 @@ EXECUTE FUNCTION insert_client();
 
 
 CREATE TABLE Corrida (
-  CliId INTEGER NOT NULL,
+  CliId_corrida VARCHAR(4) NOT NULL,
   Placa VARCHAR(7) NOT NULL,
   DataPedido DATE NOT NULL,
-  PRIMARY KEY(CliId, Placa, DataPedido),
-  FOREIGN KEY(CliId)
-    REFERENCES Cliente(CliId)
+  cliid_Cliente varchar(4) not null,
+  PRIMARY KEY(CliId_corrida, Placa, DataPedido, cliid_Cliente),
+  FOREIGN KEY(cliid_Cliente)
+    REFERENCES cliente(cliid)
       ON DELETE NO ACTION
       ON UPDATE NO ACTION,
   FOREIGN KEY(Placa)
