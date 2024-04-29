@@ -68,7 +68,7 @@ EXECUTE FUNCTION insert_client();
 
 
 create TABLE Corrida (
-  idCorrida VARCHAR(4) NOT NULL,
+  idCorrida serial unique NOT NULL,
   Placa VARCHAR(7) NOT NULL,
   DataPedido DATE NOT NULL,
   cliidCliente int not null,
