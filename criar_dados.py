@@ -132,8 +132,9 @@ class Generator:
             user_id = random.randint(0, self.__user_quantity)
             plate = random.choice(self.__plates)
             date = self._faker.date()
+            km_total = random.randint(1, 10000)
             
-            file_as_str += (f"INSERT INTO Corrida(CliId, Placa, DataPedido) VALUES ('{user_id}', '{plate}', '{date}');\n")
+            file_as_str += (f"INSERT INTO Corrida(cliidcliente, Placa, DataPedido, kmtotal) VALUES ('{user_id}', '{plate}', '{date}', {km_total});\n")
         
         return self._course_path, file_as_str
     
