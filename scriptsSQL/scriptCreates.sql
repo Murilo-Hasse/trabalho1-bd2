@@ -20,34 +20,40 @@ CREATE TABLE Taxi (
 --------------------------------------------------------------------------------------
 
 CREATE TABLE ClienteEmpresa (
-  CliId VARCHAR(4) NOT NULL,
+  CliId int references Cliente(cliid),
   Nome VARCHAR(80) NOT NULL,
-  CNPJ VARCHAR(14) NOT NULL UNIQUE,
-  PRIMARY KEY(CliId)
+  CNPJ VARCHAR(18) NOT NULL unique
 );
 
 CREATE TABLE ClienteFisico (
-  CliId VARCHAR(4) NOT NULL,
+  CliId int references Cliente(cliid),
   Nome VARCHAR(80) NOT NULL,
-  CPF VARCHAR(14) NOT NULL UNIQUE,
-  PRIMARY KEY(CliId)
+  CPF VARCHAR(14) NOT NULL unique
 );
 
 
 CREATE TABLE Cliente (
   CliId BIGSERIAL NOT NULL PRIMARY KEY,
-  Documento VARCHAR(14) NOT NULL UNIQUE,
-  FOREIGN KEY (Documento) REFERENCES ClienteEmpresa(CNPJ) ON DELETE CASCADE,
-  FOREIGN KEY (Documento) REFERENCES ClienteFisico(CPF) ON DELETE CASCADE
+  Documento VARCHAR(14) NOT NULL UNIQUE
 );
+
+INSERT INTO ClienteFisico(Nome, CPF) VALUES ('Diogn Freitas', '159.853.702-41');
+select * from clientefisico c 
+select * from cliente c 
 
 CREATE OR REPLACE FUNCTION insert_client()
 RETURNS TRIGGER AS $$
+declare 
+	x INT;
 BEGIN
-    IF (TG_TABLE_NAME = 'ClienteEmpresa') THEN
+    IF (TG_TABLE_NAME = 'clienteempresa') THEN
         INSERT INTO Cliente(Documento) VALUES (NEW.CNPJ);
-    ELSIF (TG_TABLE_NAME = 'ClienteFisico') THEN
-        INSERT INTO Cliente(Documento) VALUES (NEW.CPF);
+       	select cliid into x from cliente where documento = (cnpj);
+       	update clienteempresa set Cliid = x where cnpj = (cnpj);
+    ELSIF (TG_TABLE_NAME = 'clientefisico') THEN
+        INSERT INTO Cliente(Documento) values (NEW.CPF);
+        select cliid into x from cliente where documento = (new.cpf);
+       	update clientefisico set Cliid = x where cpf = (new.cpf);
     END IF;
     RETURN NEW;
 END;

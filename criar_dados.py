@@ -34,8 +34,8 @@ class Generator:
         self._place_path = place_path
         self._queue_path = queue_path
         
-        self.__plates = list()
-        self.__cnhs = list()
+        self.__plates = []
+        self.__cnhs = []
         self.__user_quantity = 0
         self.__cpfs = []
         self.__cnpjs = []
