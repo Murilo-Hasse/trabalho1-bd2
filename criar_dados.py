@@ -79,7 +79,7 @@ class Generator:
             validade = self._faker.date()
             placa = self.__plates[i]
             
-            file_as_str += (f"INSERT INTO Motorista(CNH, Nome, CNHValid, Placa) VALUES ('{cnh}', '{name}', {validade}, '{placa}');\n")
+            file_as_str += (f"INSERT INTO Motorista(CNH, Nome, CNHValid, Placa) VALUES ('{cnh}', '{name}', '{validade}', '{placa}');\n")
             
         return self._driver_path, file_as_str
     
@@ -164,7 +164,7 @@ class Generator:
             km_in = random.randint(500, 120000)
             
             
-            file_as_str += (f"INSERT INTO Fila(Zona, CNH, DataHoraIn, DataHoraOut, KmIn) VALUES ('{zona}', '{cnh}', {data_hora_in}, {data_hora_out}, {km_in});\n")
+            file_as_str += (f"INSERT INTO Fila(Zona, CNH, DataHoraIn, DataHoraOut, KmIn) VALUES ('{zona}', '{cnh}', '{data_hora_in}', '{data_hora_out}', {km_in});\n")
         
         return self._queue_path, file_as_str
             
