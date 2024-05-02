@@ -104,7 +104,7 @@ class Generator:
             name = self._faker.name()
             cpf = self.__generate_until_unique(self._faker.cpf, self.__cpfs)
             
-            file_as_str += (f"INSERT INTO ClienteFisico(CliId, Nome, CPF) VALUES ('{i}', '{name}', '{cpf}');\n")
+            file_as_str += (f"INSERT INTO ClienteFisico(Nome, CPF) VALUES ('{name}', '{cpf}');\n")
             
         return self._user_path, file_as_str
     
@@ -120,7 +120,7 @@ class Generator:
             
             cnpj = self.__generate_until_unique(self._faker.cnpj, self.__cnpjs)
             
-            file_as_str += (f"INSERT INTO ClienteEmpresa(CliId, Nome, CNPJ) VALUES ('{i}', '{name}', '{cnpj}');\n")
+            file_as_str += (f"INSERT INTO ClienteEmpresa(Nome, CNPJ) VALUES ('{name}', '{cnpj}');\n")
         
         return self._enterprises_path, file_as_str
     
