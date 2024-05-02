@@ -38,9 +38,6 @@ CREATE TABLE Cliente (
   Documento VARCHAR(14) NOT NULL UNIQUE
 );
 
-INSERT INTO ClienteFisico(Nome, CPF) VALUES ('Diogn Freitas', '159.853.702-41');
-select * from clientefisico c 
-select * from cliente c 
 
 CREATE OR REPLACE FUNCTION insert_client()
 RETURNS TRIGGER AS $$
