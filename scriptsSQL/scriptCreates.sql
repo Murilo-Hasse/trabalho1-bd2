@@ -1,11 +1,11 @@
-DROP TABLE IF EXISTS Corrida;
-DROP TABLE IF EXISTS Fila;
-DROP TABLE IF EXISTS Cliente;
-DROP TABLE IF EXISTS ClienteEmpresa;
-DROP TABLE IF EXISTS ClienteFisico;
-DROP TABLE IF EXISTS Motorista;
-DROP TABLE IF EXISTS Zona;
-DROP TABLE IF EXISTS Taxi;
+DROP TABLE IF EXISTS Corrida cascade;
+DROP TABLE IF EXISTS Fila cascade;
+DROP TABLE IF EXISTS Cliente cascade;
+DROP TABLE IF EXISTS ClienteEmpresa cascade;
+DROP TABLE IF EXISTS ClienteFisico cascade;
+DROP TABLE IF EXISTS Motorista cascade;
+DROP TABLE IF EXISTS Zona cascade;
+DROP TABLE IF EXISTS Taxi cascade;
 
 CREATE TABLE Taxi (
   Placa VARCHAR(7) NOT NULL,
@@ -22,8 +22,7 @@ CREATE TABLE Taxi (
 CREATE TABLE ClienteEmpresa (
   CliId int references Cliente(cliid),
   Nome VARCHAR(80) NOT NULL,
-  CNPJ VARCHAR(18) NOT NULL UNIQUE,
-  PRIMARY KEY(CliId)
+  CNPJ VARCHAR(18) NOT NULL UNIQUE
 );
 
 CREATE TABLE ClienteFisico (
@@ -35,7 +34,7 @@ CREATE TABLE ClienteFisico (
 
 CREATE TABLE Cliente (
   CliId BIGSERIAL NOT NULL PRIMARY KEY,
-  Documento VARCHAR(14) NOT NULL UNIQUE
+  Documento VARCHAR(18) NOT NULL UNIQUE
 );
 
 
@@ -46,8 +45,8 @@ declare
 BEGIN
     IF (TG_TABLE_NAME = 'clienteempresa') THEN
         INSERT INTO Cliente(Documento) VALUES (NEW.CNPJ);
-       	select cliid into x from cliente where documento = (cnpj);
-       	update clienteempresa set Cliid = x where cnpj = (cnpj);
+       	select cliid into x from cliente where documento = (new.cnpj);
+       	update clienteempresa set Cliid = x where cnpj = (new.cnpj);
     ELSIF (TG_TABLE_NAME = 'clientefisico') THEN
         INSERT INTO Cliente(Documento) values (NEW.CPF);
         select cliid into x from cliente where documento = (new.cpf);
