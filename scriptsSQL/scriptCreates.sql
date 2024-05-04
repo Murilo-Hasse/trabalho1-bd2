@@ -32,6 +32,11 @@ CREATE TABLE Taxi (
 
 --------------------------------------------------------------------------------------
 
+CREATE TABLE Cliente (
+  CliId BIGSERIAL NOT NULL PRIMARY KEY,
+  Documento VARCHAR(18) NOT NULL UNIQUE
+);
+
 CREATE TABLE ClienteEmpresa (
   CliId int references Cliente(cliid),
   Nome VARCHAR(80) NOT NULL,
@@ -42,12 +47,6 @@ CREATE TABLE ClienteFisico (
   CliId int references Cliente(cliid),
   Nome VARCHAR(80) NOT NULL,
   CPF VARCHAR(14) NOT NULL unique
-);
-
-
-CREATE TABLE Cliente (
-  CliId BIGSERIAL NOT NULL PRIMARY KEY,
-  Documento VARCHAR(18) NOT NULL UNIQUE
 );
 
 

@@ -159,11 +159,9 @@ class Generator:
             user_id = random.randint(0, self.__user_quantity)
             plate = random.choice(self.__plates)
             
-            formato_datetime = "%Y-%m-%d %H:%M:%S.%f"
             
             data = self._faker.date()
             
-
             km_total = random.randint(1, 99)
             
             if plate not in self.__car_km:
@@ -173,10 +171,8 @@ class Generator:
             file_as_str += (f"INSERT INTO Corrida(cliidcliente, Placa, DataPedido, kmtotal) VALUES ('{user_id}', '{plate}', '{data}', {km_total});\n")
         
         
-        
-        
-        
             #data_hora1 sempre vai ser maior que data_hora2
+            formato_datetime = "%Y-%m-%d %H:%M:%S.%f"
             data_hora1 = datetime.strptime(f'{data} {self.__generate_hour()}', formato_datetime)
             data_hora2 = datetime.strptime(f'{data} {self.__generate_hour()}', formato_datetime)
             
