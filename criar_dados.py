@@ -1,9 +1,9 @@
 from faker import Faker
 import os
 import random
-from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Tuple
+from datetime import datetime
 
 PATH = Path(__file__).parent
 
@@ -42,6 +42,7 @@ class Generator:
         self.__place_quantity = 0
         
         self.__cnh_plate = {}
+        self.__plate_cnh = {}
         self.__car_km = {}
     
     
@@ -83,6 +84,7 @@ class Generator:
             placa = self.__plates[i]
             
             self.__cnh_plate[cnh] = placa
+            self.__plate_cnh[placa] = cnh
             
             file_as_str += (f"INSERT INTO Motorista(CNH, Nome, CNHValid, Placa) VALUES ('{cnh}', '{name}', {validade}, '{placa}');\n")
             
@@ -129,25 +131,6 @@ class Generator:
         
         return self._enterprises_path, file_as_str
     
-    
-    @save_to_file
-    def generate_fake_drives(self, quantity: int) -> Tuple[str, str]:
-        file_as_str = ''
-        for i in range(0, quantity):
-            user_id = random.randint(0, self.__user_quantity)
-            plate = random.choice(self.__plates)
-            date = self._faker.date()
-            km_total = random.randint(1, 99)
-            
-            if plate not in self.__car_km:
-                self.__car_km[plate] = 0
-            self.__car_km[plate] += km_total
-            
-            file_as_str += (f"INSERT INTO Corrida(cliidcliente, Placa, DataPedido, kmtotal) VALUES ('{user_id}', '{plate}', '{date}', {km_total});\n")
-        
-        return self._course_path, file_as_str
-    
-    
     @save_to_file
     def generate_fake_places(self, quantity: int) -> Tuple[str, str]:
         file_as_str = ''
@@ -160,16 +143,53 @@ class Generator:
         
         return self._place_path, file_as_str
     
+    @staticmethod
+    def __generate_hour():
+        hora = str(random.randint(0, 23))
+        minuto = str(random.randint(0, 59))
+        segundo = str(random.randint(0, 59))
+        milissegundo = str(random.randint(0, 99999))
+        return f'{hora.zfill(2)}:{minuto.zfill(2)}:{segundo.zfill(2)}.{milissegundo.zfill(5)}'
     
     @save_to_file
     def generate_fake_queues(self, quantity: int) -> Tuple[str, str]:
         file_as_str = ''
         
         for i in range(0, quantity):
-            zona = i
-            cnh = self.__cnhs[i]
-            data_hora_in = self._faker.date_time_this_decade()
-            data_hora_out = self._faker.date_time_this_decade()
+            user_id = random.randint(0, self.__user_quantity)
+            plate = random.choice(self.__plates)
+            
+            formato_datetime = "%Y-%m-%d %H:%M:%S.%f"
+            
+            data = self._faker.date()
+            
+
+            km_total = random.randint(1, 99)
+            
+            if plate not in self.__car_km:
+                self.__car_km[plate] = 0
+            self.__car_km[plate] += km_total
+            
+            file_as_str += (f"INSERT INTO Corrida(cliidcliente, Placa, DataPedido, kmtotal) VALUES ('{user_id}', '{plate}', '{data}', {km_total});\n")
+        
+        
+        
+        
+        
+            #data_hora1 sempre vai ser maior que data_hora2
+            data_hora1 = datetime.strptime(f'{data} {self.__generate_hour()}', formato_datetime)
+            data_hora2 = datetime.strptime(f'{data} {self.__generate_hour()}', formato_datetime)
+            
+            if not (data_hora1 > data_hora2):
+                data_hora1, data_hora2 = data_hora2, data_hora1
+            
+            
+            data_hora_out = data_hora1.strftime(formato_datetime)
+            data_hora_in = data_hora2.strftime(formato_datetime)
+        
+            zona = random.randint(1, self.__place_quantity)
+            
+            cnh = self.__plate_cnh[plate]
             
             try:
                 km_in = self.__car_km[self.__cnh_plate[cnh]]
@@ -187,7 +207,6 @@ if __name__ == '__main__':
     fake_generator.generate_fake_drivers(10000)
     fake_generator.generate_fake_users(10000)
     fake_generator.generate_fake_enterprises(10000)
-    fake_generator.generate_fake_drives(65535)
     fake_generator.generate_fake_places(10000)
-    fake_generator.generate_fake_queues(10000)
+    fake_generator.generate_fake_queues(65535)
     
