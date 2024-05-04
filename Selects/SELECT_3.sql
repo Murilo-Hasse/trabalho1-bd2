@@ -6,20 +6,21 @@
 -- Qual passou menos tempo por zona?
 
 
-select max(fil.datahoraout - fil.datahorain) as maximo_tempo_fila, mot.nome as nome, mot.placa as placa_carro,
-avg(fil.datahoraout - fil.datahorain) as media_tempo_fila, (taxi.marca)||' '||(taxi.modelo) as carro
+SELECT 
+	MAX(fil.datahoraout - fil.datahorain) AS maximo_tempo_fila, 
+	mot.nome as nome, mot.placa AS placa_carro,
+	AVG(fil.datahoraout - fil.datahorain) AS media_tempo_fila, 
+	(taxi.marca) || ' ' || (taxi.modelo) AS carro
+FROM fila AS fil
+INNER JOIN motorista AS mot
+	ON fil.cnh = mot.cnh
+INNER JOIN taxi
+	USING placa
+WHERE
+	taxi.marca || ' ' || taxi.modelo LIKE '%a%'
 
-  from fila fil
-	inner join motorista mot
-		on(fil.cnh = mot.cnh)
-	inner join taxi
-		using(placa)
-		
-	where
-		(taxi.marca)||' '||(taxi.modelo) like '%a%'
-
-	group by  mot.nome, mot.placa, carro
-	order by maximo_tempo_fila desc
+GROUP BY mot.nome, mot.placa, carro
+ORDER BY maximo_tempo_fila DESC;
 
 
 
