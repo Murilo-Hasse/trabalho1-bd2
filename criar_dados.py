@@ -190,7 +190,7 @@ class Generator:
             try:
                 km_in = self.__car_km[self.__cnh_plate[cnh]]
             except:
-                pass
+                km_in = 0
             
             file_as_str += (f"INSERT INTO Fila(Zona, CNH, DataHoraIn, DataHoraOut, KmIn) VALUES ('{zona+1}', '{cnh}', '{data_hora_in}', '{data_hora_out}', {km_in});\n")
         

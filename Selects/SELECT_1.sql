@@ -14,4 +14,4 @@ WHERE
 AND
 	COR.Datapedido between '01-01-1995' and '31-12-2022'
 AND
-	MOT.Nome = 'Bernardo Mendes'
+	MOT.Nome = 'Bernardo Mendes';
