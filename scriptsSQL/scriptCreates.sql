@@ -29,8 +29,13 @@ CREATE TABLE Taxi (
   PRIMARY KEY(Placa)
 );
 
+-------------------------------------------------------------------------------------
 
---------------------------------------------------------------------------------------
+
+CREATE TABLE Cliente (
+  CliId BIGSERIAL NOT NULL PRIMARY KEY,
+  Documento VARCHAR(18) NOT NULL UNIQUE
+);
 
 CREATE TABLE Cliente (
   CliId BIGSERIAL NOT NULL PRIMARY KEY,
