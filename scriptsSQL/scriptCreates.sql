@@ -6,19 +6,6 @@ DROP TABLE IF EXISTS ClienteFisico cascade;
 DROP TABLE IF EXISTS Motorista cascade;
 DROP TABLE IF EXISTS Zona cascade;
 DROP TABLE IF EXISTS Taxi cascade;
-DROP TABLE IF EXISTS mytable cascade;
-DROP TABLE IF EXISTS petshop cascade;
-
-delete from corrida;
-delete from fila;
-delete from motorista;
-delete from zona;
-delete from taxi;
-delete from cliente;
-delete from clientefisico;
-delete from clienteempresa;
-
-
 
 CREATE TABLE Taxi (
   Placa VARCHAR(7) NOT NULL,
