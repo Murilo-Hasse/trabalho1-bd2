@@ -40,6 +40,9 @@ class Generator:
         self.__cpfs = []
         self.__cnpjs = []
         self.__place_quantity = 0
+        
+        self.__cnh_plate = {}
+        self.__car_km = {}
     
     
     @save_to_file
@@ -78,6 +81,8 @@ class Generator:
             name = self._faker.name()
             validade = self._faker.date()
             placa = self.__plates[i]
+            
+            self.__cnh_plate[cnh] = placa
             
             file_as_str += (f"INSERT INTO Motorista(CNH, Nome, CNHValid, Placa) VALUES ('{cnh}', '{name}', {validade}, '{placa}');\n")
             
@@ -126,13 +131,17 @@ class Generator:
     
     
     @save_to_file
-    def generate_fake_drives(self, quantity: int) -> Tuple[str, str]:    
+    def generate_fake_drives(self, quantity: int) -> Tuple[str, str]:
         file_as_str = ''
         for i in range(0, quantity):
             user_id = random.randint(0, self.__user_quantity)
             plate = random.choice(self.__plates)
             date = self._faker.date()
-            km_total = random.randint(1, 10000)
+            km_total = random.randint(1, 99)
+            
+            if plate not in self.__car_km:
+                self.__car_km[plate] = 0
+            self.__car_km[plate] += km_total
             
             file_as_str += (f"INSERT INTO Corrida(cliidcliente, Placa, DataPedido, kmtotal) VALUES ('{user_id}', '{plate}', '{date}', {km_total});\n")
         
@@ -161,10 +170,13 @@ class Generator:
             cnh = self.__cnhs[i]
             data_hora_in = self._faker.date_time_this_decade()
             data_hora_out = self._faker.date_time_this_decade()
-            km_in = random.randint(500, 120000)
             
+            try:
+                km_in = self.__car_km[self.__cnh_plate[cnh]]
+            except:
+                pass
             
-            file_as_str += (f"INSERT INTO Fila(Zona, CNH, DataHoraIn, DataHoraOut, KmIn) VALUES ('{zona}', '{cnh}', '{data_hora_in}', '{data_hora_out}', {km_in});\n")
+            file_as_str += (f"INSERT INTO Fila(Zona, CNH, DataHoraIn, DataHoraOut, KmIn) VALUES ('{zona+1}', '{cnh}', '{data_hora_in}', '{data_hora_out}', {km_in});\n")
         
         return self._queue_path, file_as_str
             
