@@ -157,8 +157,8 @@ class Generator:
         file_as_str = ''
         
         for i in range(0, quantity):
-            zona = random.randint(1, self.__place_quantity)
-            cnh = random.choice(self.__cnhs)
+            zona = i
+            cnh = self.__cnhs[i]
             data_hora_in = self._faker.date_time_this_decade()
             data_hora_out = self._faker.date_time_this_decade()
             km_in = random.randint(500, 120000)
@@ -176,6 +176,6 @@ if __name__ == '__main__':
     fake_generator.generate_fake_users(10000)
     fake_generator.generate_fake_enterprises(10000)
     fake_generator.generate_fake_drives(65535)
-    fake_generator.generate_fake_places(16355)
-    fake_generator.generate_fake_queues(32768)
+    fake_generator.generate_fake_places(10000)
+    fake_generator.generate_fake_queues(10000)
     
