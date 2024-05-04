@@ -79,7 +79,7 @@ class Generator:
             validade = self._faker.date()
             placa = self.__plates[i]
             
-            file_as_str += (f"INSERT INTO Motorista(CNH, Nome, CNHValid, Placa) VALUES ('{cnh}', '{name}', '{validade}', '{placa}');\n")
+            file_as_str += (f"INSERT INTO Motorista(CNH, Nome, CNHValid, Placa) VALUES ('{cnh}', '{name}', {validade}, '{placa}');\n")
             
         return self._driver_path, file_as_str
     
