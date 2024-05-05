@@ -9,16 +9,20 @@ credentials = {
     'port': 5432
 }
 
-def caculate_mean_time(query: str, quantity: int):
+def caculate_mean_time(query: str, quantity: int) -> str:
     connection = psycopg2.connect(**credentials)
     cursor = connection.cursor()
     
     queries = list()
+    query_type = ''
     
     for i in range(0, quantity):
         cursor.execute('DISCARD PLANS;')
+        cursor.execute('SET enable_seqscan = OFF;')
         cursor.execute(f'EXPLAIN ANALYSE {query};')
         result = cursor.fetchall()
+        
+        query_type = result[-0]
         
         pattern = r'\d+\.\d+'
         
@@ -33,12 +37,12 @@ def caculate_mean_time(query: str, quantity: int):
     cursor.close()
     connection.close()
     
-    return average
+    return f'{query_type} = {average}'
     
 if __name__ == '__main__':
     average = caculate_mean_time("""
                        SELECT * FROM bar;
                        """, 
-                       100)
+                       1024)
     
     print(average)
