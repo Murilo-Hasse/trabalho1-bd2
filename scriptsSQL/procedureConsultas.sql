@@ -25,14 +25,15 @@ CREATE OR REPLACE PROCEDURE calculate_total_time(query text, num_executions inte
 DECLARE
   i integer;
   tipo VARCHAR(20);
+  tipo2 VARCHAR(20);
   total_planning_time NUMERIC := 0;
   total_execution_time NUMERIC := 0;
   current_planning_time numeric;
   current_execution_time numeric;
   filt VARCHAR(200);
+  filt2 VARCHAR(200);
   linhas NUMERIC;
   explain_result json;
-  id_seq NUMERIC;
 BEGIN
   SET enable_seqscan = OFF;
   EXECUTE 'EXPLAIN (ANALYZE, FORMAT JSON) ' || query INTO explain_result;
@@ -63,6 +64,8 @@ BEGIN
     EXECUTE 'DISCARD PLANS';
   END LOOP;
   tipo := (explain_result->0->'Plan'->>'Index Name')::VARCHAR(20);
+  tipo2 := (explain_result->0->'Plan'->>'Index Name')::VARCHAR(20);
+  filt2 := (explain_result->0->'Plan'->>'Filter')::VARCHAR(200);
   filt := (explain_result->0->'Plan'->>'Filter')::VARCHAR(200);
   linhas := (explain_result->0->'Plan'->>'Rows Removed by Filter')::NUMERIC;
   INSERT INTO log_Consultas
@@ -92,18 +95,35 @@ BEGIN
     RAISE NOTICE 'Consulta sequencial já lançada';
     RETURN;
   ELSE
+    total_execution_time := 0;
+    total_planning_time := 0;
+    FOR i IN 1..num_executions LOOP
+      EXECUTE 'EXPLAIN (ANALYZE, FORMAT JSON) ' || query INTO explain_result;
+      current_planning_time := (explain_result->0->>'Planning Time')::numeric;
+      current_execution_time := (explain_result->0->>'Execution Time')::numeric;
+      total_planning_time := total_planning_time + current_planning_time;
+      total_execution_time := total_execution_time + current_execution_time;
+      EXECUTE 'DISCARD PLANS';
+    END LOOP;
     INSERT INTO log_sequencial(quantidade_executada, tempo_total_medio, tempo_plan_medio, tempo_exec_medio, filtro, linhas_removidas)
-    VALUES(num_executions, ((total_execution_time + total_planning_time) / num_executions), total_planning_time / num_executions, total_execution_time / num_executions, filt, linhas)
-    RETURNING id INTO id_seq;
+    VALUES(num_executions, ((total_execution_time + total_planning_time) / num_executions), total_planning_time / num_executions, total_execution_time / num_executions, filt, linhas);
     UPDATE log_Consultas 
-    SET ref_serial = id_seq
-    WHERE tipo_consulta = (explain_result->0->'Plan'->>'Index Name')::VARCHAR(20) AND
-          filtro = (explain_result->0->'Plan'->>'Filter')::VARCHAR(200) AND
+    SET ref_serial = (
+      SELECT id
+      FROM log_sequencial
+      WHERE filtro = (explain_result->0->'Plan'->>'Filter')::VARCHAR(200) AND
+            quantidade_executada = num_executions
+      LIMIT 1
+    ) 
+    WHERE tipo_consulta = tipo2 AND
+          filtro = filt2 AND
           quantidade_executada = num_executions;
   END IF;
+  
+  
+  RAISE NOTICE 'SEQ JSON: %', explain_result;
 END;
 $$ LANGUAGE plpgsql;
-
 SELECT * FROM log_Consultas;
 SELECT * FROM log_sequencial;
 
