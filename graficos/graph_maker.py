@@ -12,7 +12,7 @@ class PlotIndexGraph:
         assert len(color_pallette_hex) == len(labels)
 
 
-    def plot_and_show(self, values: List[float], graph_precision: int, title: str, font_size: int) -> None:
+    def plot_and_show(self, values: List[float], graph_precision: int, title: str, font_size: int, x_label: str, y_label: str) -> None:
         assert len(values) == len(labels)
         assert isinstance(values[0], float | int)
         
@@ -26,6 +26,9 @@ class PlotIndexGraph:
         [bar.set_color(self.__color_pallette[idx]) for idx, bar in enumerate(bars)]
         
         plt.title(title, fontdict={'fontsize': font_size})
+        
+        plt.ylabel(y_label, fontdict={'fontsize': font_size - font_size // 2})
+        plt.xlabel(x_label, fontdict={'fontsize': font_size - font_size // 2})
         
         plt.show()
 
@@ -46,7 +49,9 @@ if __name__ == '__main__':
     graph_select_1.plot_and_show(values=values_select_5, 
                                  graph_precision=10, 
                                  title='SELECT 5', 
-                                 font_size=32)
+                                 font_size=32,
+                                 x_label='Tipo de Índice',
+                                 y_label='Tempo Médio (ms)')
         
 
     
