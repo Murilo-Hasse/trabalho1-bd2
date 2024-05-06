@@ -1,11 +1,10 @@
 --Necessitamos de um relatório que traga por zona a contagem de corridas, tamanho médio de corridas,
---maior corrida e menor corrida, utilizando um filtro de data(data inferior a data seguinte)
+--maior corrida e menor corrida, utilizando um filtro de data(data inferior a data seguinte) e um filtro por zona
 
 -- ZONA - PRINCIPAL
 -- KM médio por corrida
 -- MAX corrida
 -- MIN corrida
-
 SELECT 
 	zona.zona AS nome_zona, 
 	count(*) AS contagem_corridas, 
@@ -20,8 +19,8 @@ INNER JOIN MOTORISTA AS MOT
 INNER JOIN CORRIDA AS COR
 	ON(MOT.PLACA = COR.PLACA)
 WHERE 
-	COR.datapedido between '2000-01-01' and '2020-12-31'
-
+	COR.datapedido between '1995-01-01' and '2025-12-31' AND
+	zona.zona like '%Pinto%'
 GROUP BY zona.zona
 ORDER BY tamanho_medio_corrida;
 
