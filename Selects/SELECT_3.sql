@@ -7,8 +7,8 @@
 
 
 SELECT 
-	MAX(fil.datahoraout - fil.datahorain) AS maximo_tempo_fila, 
 	mot.nome as nome, mot.placa AS placa_carro,
+	MAX(fil.datahoraout - fil.datahorain) AS maximo_tempo_fila, 
 	AVG(fil.datahoraout - fil.datahorain) AS media_tempo_fila, 
 	(taxi.marca) || ' ' || (taxi.modelo) AS carro
 FROM fila AS fil
