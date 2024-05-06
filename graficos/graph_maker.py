@@ -9,12 +9,13 @@ class PlotIndexGraph:
         self.__color_pallette = color_pallette_hex
         self.__labels = labels
         
-        assert len(color_pallette_hex) == len(labels)
+        assert len(color_pallette_hex) == len(labels), "O tamanho da lista de paleta de cores deve ser o mesmo tamanho da lista de labels"
 
 
     def plot_and_show(self, values: List[float], graph_precision: int, title: str, font_size: int, x_label: str, y_label: str) -> None:
-        assert len(values) == len(labels)
-        assert isinstance(values[0], float | int)
+        assert len(values) == len(labels), "A lista de valores deve conter tamanho igual a lista de labels"
+        assert all(isinstance(i, float | int) for i in values), "A lista de valores deve conter apenas valores numéricos"
+        
         
         y_ticks = [float(i) for i in range(0, int(max(values) * 1.5), graph_precision)]
         y_ticks.extend(values)
