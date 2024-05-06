@@ -1,5 +1,4 @@
 import matplotlib, matplotlib.pyplot as plt
-import numpy as np
 from typing import List
 
 matplotlib.use('TkAgg')
@@ -31,7 +30,7 @@ class PlotIndexGraph:
         plt.ylabel(y_label, fontdict={'fontsize': font_size - font_size // 2})
         plt.xlabel(x_label, fontdict={'fontsize': font_size - font_size // 2})
         
-        plt.show()
+        plt.show()  
 
 if __name__ == '__main__':
     labels = ['Sem Índice', 'HASH', 'BTREE', 'BRIN', 'GIN', 'GIST']
@@ -53,6 +52,5 @@ if __name__ == '__main__':
                                  font_size=32,
                                  x_label='Tipo de Índice',
                                  y_label='Tempo Médio (ms)')
-        
 
     
