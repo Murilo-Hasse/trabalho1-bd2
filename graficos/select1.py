@@ -1,0 +1,52 @@
+import matplotlib, matplotlib.pyplot as plt
+import numpy as np
+from typing import List
+
+matplotlib.use('TkAgg')
+
+class PlotIndexGraph:
+    def __init__(self, color_pallette_hex: List[str], labels: List[str]) -> None:
+        self.__color_pallette = color_pallette_hex
+        self.__labels = labels
+        
+        assert len(color_pallette_hex) == len(labels)
+
+
+    def plot_and_show(self, values: List[float], graph_precision: int, title: str, font_size: int) -> None:
+        assert len(values) == len(labels)
+        assert isinstance(values[0], float | int)
+        
+        y_ticks = [float(i) for i in range(0, int(max(values) * 1.5), graph_precision)]
+        y_ticks.extend(values)
+        y_ticks.sort()
+        
+        bars = plt.bar(self.__labels, values)
+        plt.yticks(y_ticks)
+        
+        [bar.set_color(self.__color_pallette[idx]) for idx, bar in enumerate(bars)]
+        
+        plt.title(title, fontdict={'fontsize': font_size})
+        
+        plt.show()
+
+if __name__ == '__main__':
+    labels = ['Sem Índice', 'HASH', 'BTREE', 'BRIN', 'GIN', 'GIST']
+    color_pallette = ['#1B51F2', '#1D79F2', '#22A2F2', '#F2CF1D', '#1D79F2', '#1B51F2']
+    
+    
+    values_select_1 = [13.22, 13.14, 11.50, 13.86, 13.56, 15.18]
+    values_select_2 = [118.02, 432.94, 353.56, 381.22, 371.85, 371.56]
+    values_select_3 = [227.36, 234.17, 230.55, 224.25, 225.26, 223.69]
+    values_select_4 = [18.40, 13.85, 14.00, 13.29, 13.13, 13.94]
+    values_select_5 = [16.05, 17.44, 7.36, 19.96, 19.46, 20.74]
+    
+    
+    graph_select_1 = PlotIndexGraph(color_pallette, labels)
+    
+    graph_select_1.plot_and_show(values=values_select_5, 
+                                 graph_precision=10, 
+                                 title='SELECT 5', 
+                                 font_size=32)
+        
+
+    
