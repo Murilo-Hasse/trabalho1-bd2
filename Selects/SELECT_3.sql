@@ -12,9 +12,9 @@ SELECT
 	case
 		WHEN mot.cnhvalid < 2010 Then 'Renovar carteira'
 		else 'Validade Ok'
-	end
-	,mot.cnhvalid as cnh_valida
-	,mot.placa AS placa_carro,
+	end,
+	mot.cnhvalid as cnh_valida,
+	mot.placa AS placa_carro,
 	MAX(fil.datahoraout - fil.datahorain) AS maximo_tempo_fila, 
 	AVG(fil.datahoraout - fil.datahorain) AS media_tempo_fila, 
 	(taxi.marca) || ' ' || (taxi.modelo) AS carro
