@@ -27,7 +27,7 @@ INNER JOIN taxi
 	where taxi.marca = 'Toyota' and
 	mot.cnhvalid > 2000
 GROUP BY mot.nome, mot.placa, carro, mot.cnhvalid
-ORDER BY maximo_tempo_fila DESC;
+ORDER BY maximo_tempo_fila;
 
 
 
