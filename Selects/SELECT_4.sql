@@ -1,3 +1,6 @@
+-- "Perdi minhas chaves em um dos taxis, preciso saber quem é o motorista para poder comunicar a ele, seria possivel me indicar a lista de motoristas
+-- que tive corrida, junto a data desta corrida em questão?"
+-- Relatório que traga por clientes todos os motoristas que ele teve corrida, junto com a data da corrida em questão
 SELECT 
     cliente_nome,
     nome_motorista,
@@ -17,5 +20,5 @@ FROM (
     LEFT JOIN taxi USING (placa)
     LEFT JOIN motorista mot USING (placa)
     GROUP BY clipj.nome, clipf.nome, nome_motorista, cor.datapedido
-) AS subquery
+) AS Subconsulta
 WHERE cliente_nome LIKE '%Leonardo%'
