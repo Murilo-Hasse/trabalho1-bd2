@@ -1,5 +1,5 @@
 # %matplotlib inline
-import matplotlib.pyplot as plt
+import matplotlib, matplotlib.pyplot as plt
 from typing import List
 
 matplotlib.use('TkAgg')
@@ -11,7 +11,7 @@ class PlotIndexGraph:
         self.__labels = labels
         
         assert len(color_pallette_hex) == len(labels), "O tamanho da lista de paleta de cores deve ser o mesmo tamanho da lista de labels"
-        ]
+        
 
 
     def plot_and_show(self, values: list, graph_precision: int, title: str, font_size: int, x_label: str, y_label: str) -> None:
@@ -50,13 +50,13 @@ if __name__ == '__main__':
     values_select_4 = [18.40, 13.85, 14.00, 13.29, 13.13, 13.94]
     values_select_5 = [16.05, 17.44, 7.36, 19.96, 19.46, 20.74]
     
-    graph_select_1 = PlotIndexGraph(color_pallette, labels)
+    graph_select = PlotIndexGraph(color_pallette, labels)
     
-    graph_select_1.plot_and_show(values=values_select_1, graph_precision=10, title='Tempo médio de execução SELECT 1', font_size=font_size, x_label='Tipo de Índice', y_label='Tempo médio (Em MS)')
-    graph_select_1.plot_and_show(values=values_select_2, graph_precision=5, title='Tempo médio de execução SELECT 2', font_size=font_size, x_label='Tipo de Índice', y_label='Tempo médio (Em MS)')
-    graph_select_1.plot_and_show(values=values_select_3, graph_precision=17, title='Tempo médio de execução SELECT 3', font_size=font_size, x_label='Tipo de Índice', y_label='Tempo médio (Em MS)')
-    graph_select_1.plot_and_show(values=values_select_4, graph_precision=12, title='Tempo médio de execução SELECT 4', font_size=font_size, x_label='Tipo de Índice', y_label='Tempo médio (Em MS)')
-    graph_select_1.plot_and_show(values=values_select_5, graph_precision=10, title='Tempo médio de execução SELECT 5', font_size=font_size, x_label='Tipo de Índice', y_label='Tempo médio (Em MS)')
+    graph_select.plot_and_show(values=values_select_1, graph_precision=10, title='Tempo médio de execução SELECT 1', font_size=font_size, x_label='Tipo de Índice', y_label='Tempo médio (Em MS)')
+    graph_select.plot_and_show(values=values_select_2, graph_precision=5, title='Tempo médio de execução SELECT 2', font_size=font_size, x_label='Tipo de Índice', y_label='Tempo médio (Em MS)')
+    graph_select.plot_and_show(values=values_select_3, graph_precision=17, title='Tempo médio de execução SELECT 3', font_size=font_size, x_label='Tipo de Índice', y_label='Tempo médio (Em MS)')
+    graph_select.plot_and_show(values=values_select_4, graph_precision=12, title='Tempo médio de execução SELECT 4', font_size=font_size, x_label='Tipo de Índice', y_label='Tempo médio (Em MS)')
+    graph_select.plot_and_show(values=values_select_5, graph_precision=10, title='Tempo médio de execução SELECT 5', font_size=font_size, x_label='Tipo de Índice', y_label='Tempo médio (Em MS)')
         
     labels = ['HASH', 'BTREE', 'GIN', 'GIST', 'BRIN']
     color_pallette = ['#1B51F2', '#1D79F2', '#22A2F2', '#F2CF1D', '#1D79F2']    

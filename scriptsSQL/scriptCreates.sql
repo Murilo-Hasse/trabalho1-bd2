@@ -24,10 +24,6 @@ CREATE TABLE Cliente (
   Documento VARCHAR(18) NOT NULL UNIQUE
 );
 
-CREATE TABLE Cliente (
-  CliId BIGSERIAL NOT NULL PRIMARY KEY,
-  Documento VARCHAR(18) NOT NULL UNIQUE
-);
 
 CREATE TABLE ClienteEmpresa (
   CliId int references Cliente(cliid),
