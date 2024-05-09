@@ -75,4 +75,5 @@ Esse último select foi para selecionar os melhores clientes dos últimos 12 mes
 OBS:
   Para todos selects é perceptível a utilização base de filtros de data, pois em quase todos problemas sugeridos no grupo ou ideias vindo de relatórios já criados, a data é recorrente. Como forma de evitar isso, decidimos incluir sempre que necessário(evitar o uso de data) um where secundário, que possibilitaria a plena optimização dos índices que não utilizam data, como caso do GIN e GIST. Para casos mais extremos, optamos por fazer o select buscando que não somente fossem utilizadas colunas diferentes, bem como, técnicas de complexidade distintas.
 
-
+5. Comparação de Tempo de Execução dos Índices:
+   Para comparativo de validação dos indices utilizamos inicialmente uma procedure criada via PL/SQL. A mesma nos retornava os dados necessários, porém, como objetivo era documentar em uma tabela própria estas informações não tivemos tanto exito. Optamos então pela utilização de um script em python do qual desabilitava as buscas automaticas do banco afim de forçar a utilização dos indices, para isto, utilizamos a biblioteca Psycopg2, o script se encontra no repositório a partir do arquivo execute.py.
