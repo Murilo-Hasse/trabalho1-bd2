@@ -25,6 +25,7 @@ Rodrigo Vanchtchuk
 1. Criação banco:
     Durante criação do banco utilizamos modelo relacional base disponibilizado pelo professor para criação.
 ![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/c87793db-b3a2-4f35-aa7f-b41699628e61)
+
 Também tinhamos como base a criação base deste modelo, do qual poderiamos fazer alterações para estruturação do mesmo, estes scripts podem ser encontrados a partir da pasta scriptsSQL/CreateProfessor.sql.
   Ao avaliarmos como gostariamos de fazer este trabalho, algumas ideias surgiram, dentre elas a que mais se destacou seria a utilização da tabela apontada no modelo relacional, que parecia excluida na criação do banco, que era a ClienteEmpresa. Para isto, foi agregado ao banco a tabela ClienteFísico e ajustado para que tanto clienteEmpresa quanto clienteFisico relacionassem com tabela Cliente.
 A partir disso foi desenvolvida uma trigger para que sempre que houvesse inclusão de dados em clienteFisico ou clienteEmpresa fosse criado esses dados para tabela Cliente e devido cliente ser bigserial, a partir da procedure chamada com a trigger, foi possivel atualizar o id de registro destas tabelas não perdendo assim o identificador de clientes.
