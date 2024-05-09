@@ -45,18 +45,30 @@ O modelo lógico final ficou do seguinte modo:
    Para criação dos indices, optamos por utilizar todos campos possiveis, afim de não limitar indices que trabalham somente com textos em consultas que detém em sua maioria de campos do tipo numéricos.
 Os indices ficaram com seguinte geração:
 ### Select 1
+    O primeiro Select tem o objetivo de extrair as contagens de corridas e o total da quilometragem percorrida, pensamos no caso de um gestor necessita averiguar se um taxista em específico está de fato realizando as corridas nos períodos que detém de trabalho e se as corridas na zona em questão estão sendo lucrativas baseado na km.
+
 ![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/4d569f86-01d6-4bcb-9d63-4ab9d3ef61dd)
 ![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/e923c599-5e46-4178-b56d-1781b38c6b02)
 ### Select 2
+    O intuito desse Select é buscar contagem de corrida, tamanho médio das corridas, maior corrida e menor corrida. Utilizando o filtro de data(data inferior e a data seguinte). KM médio por corrida, MAX corrida, MIN corrida. Neste select tivemos a menor optimização através de índices, trazendo valores até 4x maior do que a busca sequencial.
+    
 ![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/1a410879-f597-454c-9f5b-17a72a79ba5d)
 ![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/87f98e14-248a-4f3e-b6b4-bbab5d6d16d6)
 ### Select 3
+    Este Select irá trazer um relatório relacionado às consultas de tempo dos motoristas. Trará motorista, placa do seu carro, tempo máximo de espera em fila, tempo médio de espera em fila, marca do táxi + modelo do táxi. No select em questão desejávamos utilizar uma concatenação de um campo, a fim de que a partir dela os filtros que se beneficiam de texto, pudessem  mostrar sua diferença, neste caso, porém o ocorrido foi que os valores númericos tiveram melhor resultado, sendo o select sem indice superior a todos.
+
+    
 ![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/fcbfdd35-ac4f-46cc-acff-9553b65ac0f6)\
 ![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/4d65db3c-a87b-440b-b158-8f18068c434a)
 ### Select 4
+    Para select 4 decidimos optar por realizar algumas consultas um pouco diferente, realizando assim, uma subquery, esta que busca retornar 3 informações básicas da corrida. 
+
 ![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/1ef5fdc6-13d4-405a-92a1-45829fe46023)
 ![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/7a148804-4bb2-45e4-9ed7-9bd781614a57)
 ### Select 5
+    Esse último select foi para selecionar os melhores clientes dos últimos 12 meses, onde retornou se é cliente empresa ou cliente físico, a quantidade de Km percorrida, se ele é aprovado como vip e por último a coluna de zona.
+
+        
 ![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/38866360-3a10-4de8-8920-e6d8271f8862)
 ![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/aef1fd51-287c-4b69-998c-f645510f3d5c)
 
