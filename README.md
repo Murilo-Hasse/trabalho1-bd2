@@ -30,6 +30,7 @@ Também tinhamos como base a criação base deste modelo, do qual poderiamos faz
 A partir disso foi desenvolvida uma trigger para que sempre que houvesse inclusão de dados em clienteFisico ou clienteEmpresa fosse criado esses dados para tabela Cliente e devido cliente ser bigserial, a partir da procedure chamada com a trigger, foi possivel atualizar o id de registro destas tabelas não perdendo assim o identificador de clientes.
 Outros ajustes foram realizados, mudando tabelas de varchar para int e a criação de colunas que possibilitassem a melhor comunicação do banco.
 O modelo lógico final ficou do seguinte modo:
+
 ![Imagem do WhatsApp de 2024-05-06 à(s) 16 33 47_d5a7a4c8](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/2ed1a578-0260-4661-9a9c-1d92ca7032ea)
 
 
