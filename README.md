@@ -44,15 +44,21 @@ O modelo lógico final ficou do seguinte modo:
    Para criação dos indices, optamos por utilizar todos campos possiveis, afim de não limitar indices que trabalham somente com textos em consultas que detém em sua maioria de campos do tipo numéricos.
 Os indices ficaram com seguinte geração:
 ### Select 1
+![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/4d569f86-01d6-4bcb-9d63-4ab9d3ef61dd)
 ![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/e923c599-5e46-4178-b56d-1781b38c6b02)
 ### Select 2
+![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/1a410879-f597-454c-9f5b-17a72a79ba5d)
 ![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/87f98e14-248a-4f3e-b6b4-bbab5d6d16d6)
 ### Select 3
+![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/fcbfdd35-ac4f-46cc-acff-9553b65ac0f6)\
 ![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/4d65db3c-a87b-440b-b158-8f18068c434a)
 ### Select 4
+![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/1ef5fdc6-13d4-405a-92a1-45829fe46023)
 ![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/7a148804-4bb2-45e4-9ed7-9bd781614a57)
 ### Select 5
+![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/38866360-3a10-4de8-8920-e6d8271f8862)
 ![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/aef1fd51-287c-4b69-998c-f645510f3d5c)
+
 OBS:
   Para todos selects é perceptível a utilização base de filtros de data, pois em quase todos problemas sugeridos no grupo ou ideias vindo de relatórios já criados, a data é recorrente. Como forma de evitar isso, decidimos incluir sempre que necessário(evitar o uso de data) um where secundário, que possibilitaria a plena optimização dos índices que não utilizam data, como caso do GIN e GIST. Para casos mais extremos, optamos por fazer o select buscando que não somente fossem utilizadas colunas diferentes, bem como, técnicas de complexidade distintas.
 
