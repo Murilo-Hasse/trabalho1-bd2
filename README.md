@@ -22,8 +22,8 @@ Leonardo Santana
 Rodrigo Vanchtchuk
 
 
-1. #### Criação banco:
-    Durante criação do banco utilizamos modelo relacional base disponibilizado pelo professor para criação.
+#### 1. Criação banco:
+Durante criação do banco utilizamos modelo relacional base disponibilizado pelo professor para criação.
 ![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/c87793db-b3a2-4f35-aa7f-b41699628e61)
 
 Também tinhamos como base a criação base deste modelo, do qual poderiamos fazer alterações para estruturação do mesmo, estes scripts podem ser encontrados a partir da pasta scriptsSQL/CreateProfessor.sql.
@@ -35,13 +35,13 @@ O modelo lógico final ficou do seguinte modo:
 ![Imagem do WhatsApp de 2024-05-06 à(s) 16 33 47_d5a7a4c8](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/2ed1a578-0260-4661-9a9c-1d92ca7032ea)
 
 
-2. #### População do Banco:
-   Para processo de população do banco, decidimos utilizar a biblioteca Faker do python, da qual possibilitaria a criação dos inserts disponiveis a partir da pasta scriptsSQL/Inserts. Os scripts estão ordenados com a numeração entre parenteses, devendo ser rodados sequencialmente para criação devida.
+#### 2.População do Banco:
+Para processo de população do banco, decidimos utilizar a biblioteca Faker do python, da qual possibilitaria a criação dos inserts disponiveis a partir da pasta scriptsSQL/Inserts. Os scripts estão ordenados com a numeração entre parenteses, devendo ser rodados sequencialmente para criação devida.
 
-3. ####  Desenvolvimento consultas:
+#### 3.Desenvolvimento consultas:
   O desenvolvimento de consultas se baseou no desenvolvimento de história de usuários para levantamento das necessidades dos mesmos, o que possiblitou enrriquecer nossas consultas simulando problemas reais. Pela utilização dos indices ser especifica para alguns tipos de problemas, decidimos optar por consultas que partissem de caminhos lógicos para filtragem de valores numéricos e em outros casos para filtragem de valores do tipo texto. Optamos por uma abordagem complicando mais a construção a cada select afim de que tivessemos diferentes resultados.
 
-4. #### Criação de Índices:
+#### 4.Criação de Índices:
    Para criação dos indices, optamos por utilizar todos campos possiveis, afim de não limitar indices que trabalham somente com textos em consultas que detém em sua maioria de campos do tipo numéricos.
 Os indices ficaram com seguinte geração:
 ### Select 1
@@ -75,5 +75,5 @@ Esse último select foi para selecionar os melhores clientes dos últimos 12 mes
 OBS:
   Para todos selects é perceptível a utilização base de filtros de data, pois em quase todos problemas sugeridos no grupo ou ideias vindo de relatórios já criados, a data é recorrente. Como forma de evitar isso, decidimos incluir sempre que necessário(evitar o uso de data) um where secundário, que possibilitaria a plena optimização dos índices que não utilizam data, como caso do GIN e GIST. Para casos mais extremos, optamos por fazer o select buscando que não somente fossem utilizadas colunas diferentes, bem como, técnicas de complexidade distintas.
 
-5. #### Comparação de Tempo de Execução dos Índices:
+#### 5.Comparação de Tempo de Execução dos Índices:
    Para comparativo de validação dos indices utilizamos inicialmente uma procedure criada via PL/SQL. A mesma nos retornava os dados necessários, porém, como objetivo era documentar em uma tabela própria estas informações não tivemos tanto exito. Optamos então pela utilização de um script em python do qual desabilitava as buscas automaticas do banco afim de forçar a utilização dos indices, para isto, utilizamos a biblioteca Psycopg2, o script se encontra no repositório a partir do arquivo execute.py.
