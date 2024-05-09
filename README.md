@@ -1,37 +1,58 @@
-### Trabalho 1 Banco de Dados 2
-Arquivos referentes ao primeiro trabalho exercido a partir do Terceiro semestre de Engenharia de software, sob supervisão do professor Erinaldo Pereira.
+## Trabalho 1 - Banco de Dados 2
+Este repositório contém os arquivos referentes ao primeiro trabalho desenvolvido a partir do terceiro semestre do curso de Engenharia de Software, sob a supervisão do professor Erinaldo Pereira.
+
+### Detalhamento do Trabalho
+1. Banco de Dados Taxi: Criação do banco de dados no Moodle. É permitido acrescentar atributos, mas não retirar elementos.
+2. População do Banco: População do banco com até 10.000 registros por tabela.
+3. Consultas Complexas: Desenvolvimento de consultas complexas (nível médio-alto), com um mínimo de 5 consultas. Cada consulta foi executada 100 vezes para obter a média de execução.
+4. Criação de Índices: Para cada consulta, foi criado um tipo de índice. Os tipos de índices utilizados foram:
+C1.1 - HASH
+C1.2 - BTREE
+C1.3 - GIN
+C1.4 - BRIN
+C1.5 - GIST
+5. Comparação de Tempo de Execução dos Índices: Foi realizado um gráfico comparando os tempos médios de execução de cada tipo de índice.
+6. Detalhamento da Escolha dos Índices: Foram detalhadas as razões pelas quais cada tipo de índice foi escolhido em relação aos outros, considerando as consultas realizadas e os resultados obtidos.
+7. Análise dos Tamanhos dos Índices Gerados: Foi plotado um gráfico com os tamanhos dos índices gerados e uma análise dos mesmos.
+### Integrantes do Grupo
+Murilo Hasse
+Matheus Antonio
+Paulo Fontana
+Leonardo Santana
+Rodrigo Vanchtchuk
 
 
-#### Detalhamento trabalho
-
-1 - Banco dados taxi - Criação banco no moodle
-(Pode acrescentar atributos no banco mas não retirar elementos)
-
-2 - Popular banco com até 10k registros por tabela
-
-3 - Consultas complexas(Médio alto) 5 consultas mínimo 
-  (5 consultas mínimo - > Construí consulta c1 - > executou 100x - > pegar média das 100x (Pego valor consulta))
-  
-4 - Criar para cada consulta um tipo de índice(Realizar com todas consultas)
--  C1.1 - HASH - Média execução 100x
--  C1.2 - BTREE- Média execução 100x
--  C1.3 - GIN- Média execução 100x
--  C1.4 - BRIN- Média execução 100x
--  C1.5 - GIST- Média execução 100x
-   
-5 - Comparar tempo dos índices - Plotar um gráfico dos tempos médios de cada um dos dados 
-
-6 - Detalhar motivo de cada um dos tipos de indice foram melhores entre um e outros
-
-7 - Plotar outro gráfico com os tamanhos dos indices gerados e a analise dos mesmos
+1. Criação banco:
+    Durante criação do banco utilizamos modelo relacional base disponibilizado pelo professor para criação.
+![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/c87793db-b3a2-4f35-aa7f-b41699628e61)
+Também tinhamos como base a criação base deste modelo, do qual poderiamos fazer alterações para estruturação do mesmo, estes scripts podem ser encontrados a partir da pasta scriptsSQL/CreateProfessor.sql.
+  Ao avaliarmos como gostariamos de fazer este trabalho, algumas ideias surgiram, dentre elas a que mais se destacou seria a utilização da tabela apontada no modelo relacional, que parecia excluida na criação do banco, que era a ClienteEmpresa. Para isto, foi agregado ao banco a tabela ClienteFísico e ajustado para que tanto clienteEmpresa quanto clienteFisico relacionassem com tabela Cliente.
+A partir disso foi desenvolvida uma trigger para que sempre que houvesse inclusão de dados em clienteFisico ou clienteEmpresa fosse criado esses dados para tabela Cliente e devido cliente ser bigserial, a partir da procedure chamada com a trigger, foi possivel atualizar o id de registro destas tabelas não perdendo assim o identificador de clientes.
+Outros ajustes foram realizados, mudando tabelas de varchar para int e a criação de colunas que possibilitassem a melhor comunicação do banco.
+O modelo lógico final ficou do seguinte modo:
+![Imagem do WhatsApp de 2024-05-06 à(s) 16 33 47_d5a7a4c8](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/2ed1a578-0260-4661-9a9c-1d92ca7032ea)
 
 
-Trabalho tem como propósito a optimização de diversas consultas de banco de dados através do aprendizado prático sob tema.
+3. População do Banco:
+   Para processo de população do banco, decidimos utilizar a biblioteca Faker do python, da qual possibilitaria a criação dos inserts disponiveis a partir da pasta scriptsSQL/Inserts. Os scripts estão ordenados com a numeração entre parenteses, devendo ser rodados sequencialmente para criação devida.
+
+4. Desenvolvimento consultas:
+  O desenvolvimento de consultas se baseou no desenvolvimento de história de usuários para levantamento das necessidades dos mesmos, o que possiblitou enrriquecer nossas consultas simulando problemas reais. Pela utilização dos indices ser especifica para alguns tipos de problemas, decidimos optar por consultas que partissem de caminhos lógicos para filtragem de valores numéricos e em outros casos para filtragem de valores do tipo texto. Optamos por uma abordagem complicando mais a construção a cada select afim de que tivessemos diferentes resultados.
+
+5. Criação de Índices:
+   Para criação dos indices, optamos por utilizar todos campos possiveis, afim de não limitar indices que trabalham somente com textos em consultas que detém em sua maioria de campos do tipo numéricos.
+Os indices ficaram com seguinte geração:
+### Select 1
+![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/e923c599-5e46-4178-b56d-1781b38c6b02)
+### Select 2
+![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/87f98e14-248a-4f3e-b6b4-bbab5d6d16d6)
+### Select 3
+![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/4d65db3c-a87b-440b-b158-8f18068c434a)
+### Select 4
+![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/7a148804-4bb2-45e4-9ed7-9bd781614a57)
+### Select 5
+![image](https://github.com/Murilo-Hasse/trabalho1-bd2/assets/53916135/aef1fd51-287c-4b69-998c-f645510f3d5c)
+OBS:
+  Para todos selects é perceptível a utilização base de filtros de data, pois em quase todos problemas sugeridos no grupo ou ideias vindo de relatórios já criados, a data é recorrente. Como forma de evitar isso, decidimos incluir sempre que necessário(evitar o uso de data) um where secundário, que possibilitaria a plena optimização dos índices que não utilizam data, como caso do GIN e GIST. Para casos mais extremos, optamos por fazer o select buscando que não somente fossem utilizadas colunas diferentes, bem como, técnicas de complexidade distintas.
 
 
-#### Integrantes do grupo:
--  Murilo Hasse
--  Matheus Antonio
--  Paulo Santana
--  Leonardo Fontana
--  Rodrigo Vanchtchuk
